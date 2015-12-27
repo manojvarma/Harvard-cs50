@@ -1,0 +1,38 @@
+<?php
+    
+    // configuration
+    require("../includes/config.php");
+
+    // if user reached page via GET (as by clicking a link or via redirect)
+    if ($_SERVER["REQUEST_METHOD"] == "GET")
+    {
+        // else render form
+        render("sellstock1.php");
+    }
+
+    // else if user reached page via POST (as by submitting a form via POST)
+    else if ($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+      //no of shares
+       $ns = query("SELECT * FROM pf WHERE id = ? AND symbol = ?", $_SESSION["id"],$_POST["symbol"]);
+      //cost of single share
+       $cc = lookup($_POST["symbol"]);
+     //total cost of selling share
+       $tc=number_format(($ns[0]["shares"])*($cc["price"]),2, '.', '');
+      // to acheive atomicity
+      //render("dump.php",["variable"=>"$tc"]);
+      query("DELETE FROM pf WHERE id = ? AND symbol = ?" ,$_SESSION["id"],$_POST["symbol"]);
+  
+
+       //$row = query("SELECT * FROM users WHERE id = ?", $_SESSION["id"]);
+       //$cash=$row[0]["cash"];
+       //render("dump.php",["variable"=>"$cash"]);
+      //query("")
+      query("UPDATE users SET cash =  ? WHERE id = ?",$tc+$_SESSION["rcash"],$_SESSION["id"]) ;
+        
+      redirect("index.php");
+          
+    }
+    
+?>
+
