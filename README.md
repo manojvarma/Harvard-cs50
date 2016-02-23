@@ -1,6 +1,6 @@
 # Harvard-cs50 finance project
 
-Languages used: php,MySql,html,bootstrap,js.
+Technologies used: php,MySql,html,bootstrap,js.
 Design paradigm: mvc
 
 
